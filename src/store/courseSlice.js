@@ -1,19 +1,36 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import courseService from "../services/courseService";
 
-// API Base URL
-const API_URL = "http://localhost:5138/api/Courses";
-
-// Async Thunk to Fetch Courses
-export const fetchCourses = createAsyncThunk("courses/fetchCourses", async (_, { rejectWithValue }) => {
+// Async thunk to fetch courses
+export const fetchCourses = createAsyncThunk("courses/fetchAll", async (_, thunkAPI) => {
   try {
-    const response = await axios.get(API_URL);
-    return response.data; // Assuming response.data is an array of courses
+    return await courseService.getCourses();
   } catch (error) {
-    return rejectWithValue(error.response?.data || "Failed to fetch courses");
+    return thunkAPI.rejectWithValue("Failed to fetch courses");
   }
 });
 
+// Async thunk to enroll in a course
+export const enrollCourse = createAsyncThunk("courses/enroll", async (courseId, thunkAPI) => {
+  try {
+    await courseService.enrollInCourse(courseId);
+    return courseId;
+  } catch (error) {
+    return thunkAPI.rejectWithValue("Failed to enroll");
+  }
+});
+
+// Async thunk to unenroll from a course
+export const unenrollCourse = createAsyncThunk("courses/unenroll", async (courseId, thunkAPI) => {
+  try {
+    await courseService.unenrollFromCourse(courseId);
+    return courseId;
+  } catch (error) {
+    return thunkAPI.rejectWithValue("Failed to unenroll");
+  }
+});
+
+// Course slice
 const courseSlice = createSlice({
   name: "courses",
   initialState: {
@@ -26,7 +43,6 @@ const courseSlice = createSlice({
     builder
       .addCase(fetchCourses.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
       .addCase(fetchCourses.fulfilled, (state, action) => {
         state.loading = false;
@@ -35,6 +51,16 @@ const courseSlice = createSlice({
       .addCase(fetchCourses.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(enrollCourse.fulfilled, (state, action) => {
+        state.courses = state.courses.map((course) =>
+          course.id === action.payload ? { ...course, enrolled: true } : course
+        );
+      })
+      .addCase(unenrollCourse.fulfilled, (state, action) => {
+        state.courses = state.courses.map((course) =>
+          course.id === action.payload ? { ...course, enrolled: false } : course
+        );
       });
   },
 });

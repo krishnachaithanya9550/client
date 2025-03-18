@@ -1,15 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authSlice";
-import enrollmentReducer from "./enrollmentSlice";
-import quizReducer from "./quizSlice";
-import courseReducer from "./courseSlice"; 
+import courseReducer from "./courseSlice";
+import enrollmentReducer from "./enrollmentSlice"; //  Ensure this is included
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
-    enrollment: enrollmentReducer,
-    quiz: quizReducer,
-    course: courseReducer,
+    courses: courseReducer,
+    enrollment: enrollmentReducer, // Ensure "enrollments" exists
   },
 });
 

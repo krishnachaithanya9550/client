@@ -1,25 +1,40 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { getUserIdByEmail } from "../services/authService";
 
 const Profile = () => {
-  const user = useSelector((state) => state.auth.user);
-  console.log(user);
-  console.log(user.username);
+  const [userId, setUserId] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
 
-  if (!user) {
-    return <Navigate to="/login" />;
-  }
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      const email = localStorage.getItem("userEmail"); // Retrieve stored email
+      if (email) {
+        const id = await getUserIdByEmail(email);
+        setUserId(id); // Store retrieved ID
+
+        if (id) {
+          const response = await fetch(`http://localhost:5138/api/User/${id}`);
+          const data = await response.json();
+          setUserDetails(data); // Store user details
+        }
+      }
+    };
+
+    fetchUserDetails();
+  }, []);
 
   return (
-    <div className="profile-container">
-      <h2>Profile</h2>
-      <p><strong>ID:</strong> {user.id}</p>
-      <p><strong>Username:</strong> {user.username}</p>
-      <p><strong>Email:</strong> {user.email}</p>
-      <p><strong>First Name:</strong> {user.first_name}</p>
-      <p><strong>Last Name:</strong> {user.last_name}</p>
-      <p><strong>Role:</strong> {user.role}</p>
+    <div>
+      <h2>My Profile Page</h2>
+      {userDetails ? (
+        <div>
+          <p><strong>Platform ID:</strong> {userDetails.id}</p>
+          <p><strong>UserName:</strong> {userDetails.username}</p>
+          <p><strong>Email:</strong> {userDetails.email}</p>
+        </div>
+      ) : (
+        <p>Loading user details...</p>
+      )}
     </div>
   );
 };

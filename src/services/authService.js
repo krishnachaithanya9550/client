@@ -1,57 +1,3 @@
-// // // services/authService.js
-// // import axios from 'axios';
-
-// // const API_URL = "http://localhost:5138/api/User";
-
-// // export const registerUser = async (userData) => {
-// //     try {
-// //         const response = await axios.post(`${API_URL}/register`, userData);
-// //         return response.data;
-// //     } catch (error) {
-// //         throw error; 
-// //     }
-// // };
-
-// // export const loginUser = async (loginData) => {
-// //     try {
-// //         const response = await axios.post(`${API_URL}/login`, loginData);
-// //             return response.data; // Typically a token or user data
-// //     } catch (error) {
-// //         throw error; 
-// //     }
-// // };
-
-
-// import axios from "axios";
-
-// const API_URL = "http://localhost:5138/api/User";
-
-// // Register a new user
-// export const registerUser = async (userData) => {
-//   try {
-//     const response = await axios.post(`${API_URL}/register`, userData);
-//     return response.data;
-//   } catch (error) {
-//     throw error.response ? error.response.data : error.message;
-//   }
-// };
-
-// // Login a user
-// export const loginUser = async (credentials) => {
-//   try {
-//     const response = await axios.post(`${API_URL}/login`, credentials);
-//     localStorage.setItem("authtoken", response.data.token);
-//     return response.data;
-//   } catch (error) {
-//     throw error.response ? error.response.data : error.message;
-//   }
-// };
-
-// // Logout function
-// export const logoutUser = () => {
-//   localStorage.removeItem("authtoken");
-// };
-
 
 // services/AuthServices.js
 import axios from "axios";
@@ -74,6 +20,21 @@ const login = async (loginData) => {
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: "Login failed. Check credentials." };
+  }
+};
+
+export const getUserIdByEmail = async (email) => {
+  try {
+    const response = await axios.get(`http://localhost:5138/api/User/email/${email}`);
+    if(response)
+        console.log(response.data.id);
+      else{
+        console.log("responses are not there")
+      }
+    return response.data.id; // Extract user ID from API response
+  } catch (error) {
+    console.error("Failed to fetch user ID:", error);
+    return null;
   }
 };
 

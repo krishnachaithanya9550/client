@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../store/authSlice";
-import '../style.css'
+import "../style.css";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -27,24 +27,27 @@ const Register = () => {
       role: "",
     },
     validationSchema: Yup.object({
-      username: Yup.string().min(3, "At least 3 characters").required("Required"),
-      email: Yup.string().email("Invalid email").required("Required"),
+      username: Yup.string().min(3, "Username must be at least 3 characters").required("Username is required"),
+      email: Yup.string().email("Invalid email").required("Email is required"),
       passwordHash: Yup.string()
-        .min(6, "At least 6 characters")
-        .matches(/\d/, "Must contain a number")
-        .matches(/[!@#$%^&*]/, "Must contain a special character")
-        .required("Required"),
-      first_name: Yup.string().min(2, "At least 2 characters").required("Required"),
-      last_name: Yup.string().min(2, "At least 2 characters").required("Required"),
-      role: Yup.string().oneOf(["Student", "Instructor", "Admin"], "Invalid role").required("Required"),
+        .min(6, "Password must be at least 6 characters")
+        .matches(/\d/, "Password must contain a number")
+        .matches(/[!@#$%^&*]/, "Password must contain a special character")
+        .required("Password is required"),
+      first_name: Yup.string().min(2, "First Name must be at least 2 characters").required("First Name is required"),
+      last_name: Yup.string().min(2, "Last Name must be at least 2 characters").required("Last Name is required"),
+      role: Yup.string().oneOf(["Student", "Instructor", "Admin"], "Invalid role").required("Role is required"),
     }),
-    onSubmit: (values) => {
-      dispatch(registerUser(values)).then((result) => {
-        if (result.meta.requestStatus === "fulfilled") {
-          alert("Registration Successful! Redirecting...");
-          navigate("/login");
-        }
-      });
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+        const result = await dispatch(registerUser(values)).unwrap();
+        localStorage.setItem("userEmail", values.email); // Store email in localStorage
+        alert("Registration successful! Redirecting to login...");
+        navigate("/login");
+      } catch (error) {
+        alert("Registration failed: " + (error.message || "An error occurred"));
+      }
+      setSubmitting(false);
     },
   });
 
@@ -75,7 +78,7 @@ const Register = () => {
         </select>
         {formik.touched.role && formik.errors.role && <p className="error">{formik.errors.role}</p>}
 
-        <button type="submit">Register</button>
+        <button type="submit" disabled={formik.isSubmitting}>Register</button>
       </form>
     </div>
   );
