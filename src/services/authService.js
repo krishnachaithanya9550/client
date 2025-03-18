@@ -26,11 +26,6 @@ const login = async (loginData) => {
 export const getUserIdByEmail = async (email) => {
   try {
     const response = await axios.get(`http://localhost:5138/api/User/email/${email}`);
-    if(response)
-        console.log(response.data.id);
-      else{
-        console.log("responses are not there")
-      }
     return response.data.id; // Extract user ID from API response
   } catch (error) {
     console.error("Failed to fetch user ID:", error);

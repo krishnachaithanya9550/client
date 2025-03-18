@@ -11,8 +11,19 @@ const Dashboard = () => {
   const { enrolledCourses } = useSelector((state) => state.enrollment);
 
   useEffect(() => {
-    dispatch(fetchEnrolledCourses());
+    dispatch(fetchEnrolledCourses()); // Fetch enrolled courses on mount
   }, [dispatch]);
+
+  // Function to store `courseId` in localStorage and navigate
+  const handleViewCourse = (courseId) => {
+    if (courseId) {
+      // console.log("Storing courseId:", courseId); // Debugging
+      localStorage.setItem("courseId", courseId); // Store courseId
+      navigate(`/course/${courseId}`); // Navigate to course details
+    } else {
+      console.error("Error: courseId is undefined");
+    }
+  };
 
   return (
     <div className="container mt-4">
@@ -22,15 +33,17 @@ const Dashboard = () => {
       ) : (
         <div className="row">
           {enrolledCourses.map((course, index) => (
-            <div key={course.id || index} className="col-md-4 mb-4">
-              <div 
-                className="card course-card"
-                onClick={() => navigate(`/course/${course.id}`)}
-              >
+            <div key={course.courseId || course.id || index} className="col-md-4 mb-4">
+              <div className="card course-card">
                 <div className="card-body">
                   <h5 className="card-title">{course.title}</h5>
                   <p className="card-text">{course.description}</p>
-                  <button className="btn btn-primary">View Course</button>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => handleViewCourse(course.courseId || course.id)} // Ensure correct key
+                  >
+                    View Course
+                  </button>
                 </div>
               </div>
             </div>
