@@ -70,7 +70,7 @@ const CourseDetails = () => {
           <h2 className="card-title">{course?.title}</h2>
           <p className="card-text">{course?.description}</p>
           <p><strong>Instructor:</strong> {course?.instructorUsername}</p>
-          <p><strong>Duration:</strong> {course?.duration} hours</p>
+          <p><strong>Duration:</strong> {course?.duration} 8 hours</p>
 
           {/*  Show Course Progress */}
           <div className="progress mb-3">
@@ -80,7 +80,7 @@ const CourseDetails = () => {
           </div>
 
           {/*  Update Progress Button */}
-          <button className="btn btn-success" onClick={updateProgress} disabled={updateLoading}>
+          <button className="btn btn-primary"  onClick={updateProgress} disabled={updateLoading}>
             {updateLoading ? "Updating..." : "Update Progress"}
           </button>
         </div>

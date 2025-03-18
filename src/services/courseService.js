@@ -2,37 +2,84 @@ import axios from "axios";
 
 const API_URL = "http://localhost:5138/api/Course";
 
-// Function to get all courses
+//  Helper function to get auth headers
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("authtoken");
+  return {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
+};
+
+// Get all courses
 const getCourses = async () => {
-  const token = localStorage.getItem("authtoken");
-  const response = await axios.get(API_URL, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return response.data;
+  try {
+    const response = await axios.get(API_URL, {
+      headers: getAuthHeaders(),
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching courses:", error.response?.data || error.message);
+    throw error.response?.data || "Failed to fetch courses";
+  }
 };
 
-// Function to enroll in a course
+//  Enroll in a course
 const enrollInCourse = async (courseId) => {
-  const token = localStorage.getItem("authtoken");
-  await axios.post(`${API_URL}/${courseId}/enroll`, {}, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  try {
+    await axios.post(`${API_URL}/${courseId}/enroll`, {}, {
+      headers: getAuthHeaders(),
+    });
+  } catch (error) {
+    console.error("Error enrolling in course:", error.response?.data || error.message);
+    throw error.response?.data || "Failed to enroll in course";
+  }
 };
 
-// Function to unenroll from a course
+//  Unenroll from a course
 const unenrollFromCourse = async (courseId) => {
-  const token = localStorage.getItem("authtoken");
-  await axios.delete(`${API_URL}/${courseId}/unenroll`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  try {
+    await axios.delete(`${API_URL}/${courseId}/unenroll`, {
+      headers: getAuthHeaders(),
+    });
+  } catch (error) {
+    console.error("Error unenrolling from course:", error.response?.data || error.message);
+    throw error.response?.data || "Failed to unenroll from course";
+  }
 };
 
+//  Add a new course
+const addCourse = async (courseData) => {
+  try {
+    const response = await axios.post(API_URL, courseData, {
+      headers: getAuthHeaders(),
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error adding course:", error.response?.data || error.message);
+    throw error.response?.data || "Failed to add course";
+  }
+};
 
+//  Delete a course
+const deleteCourse = async (courseId) => {
+  try {
+    await axios.delete(`${API_URL}/${courseId}`, {
+      headers: getAuthHeaders(),
+    });
+  } catch (error) {
+    console.error("Error deleting course:", error.response?.data || error.message);
+    throw error.response?.data || "Failed to delete course";
+  }
+};
 
+//  Export course service functions
 const courseService = {
   getCourses,
   enrollInCourse,
   unenrollFromCourse,
+  addCourse, 
+  deleteCourse, // Added deleteCourse function
 };
 
 export default courseService;

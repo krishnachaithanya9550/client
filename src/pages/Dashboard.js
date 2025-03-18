@@ -27,7 +27,7 @@ const Dashboard = () => {
 
   return (
     <div className="container mt-4">
-      <h2 className="text-center mb-4">My Enrolled Courses</h2>
+      <h2 >My Enrolled Courses</h2>
       {enrolledCourses.length === 0 ? (
         <p className="text-center">No enrolled courses found.</p>
       ) : (

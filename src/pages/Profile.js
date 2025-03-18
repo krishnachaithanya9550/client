@@ -31,6 +31,7 @@ const Profile = () => {
           <p><strong>Platform ID:</strong> {userDetails.id}</p>
           <p><strong>UserName:</strong> {userDetails.username}</p>
           <p><strong>Email:</strong> {userDetails.email}</p>
+          <p><strong>Role:</strong> {userDetails.role}</p>
         </div>
       ) : (
         <p>Loading user details...</p>
