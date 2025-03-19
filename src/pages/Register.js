@@ -13,7 +13,7 @@ const Register = () => {
 
   useEffect(() => {
     if (error) {
-      alert(error.message || "Registration failed.");
+      // alert(error.message || "Registration failed.");
     }
   }, [error]);
 
@@ -45,7 +45,7 @@ const Register = () => {
         alert("Registration successful! Redirecting to login...");
         navigate("/login");
       } catch (error) {
-        alert("Registration failed: " + (error.message || "An error occurred"));
+        // alert("Registration failed: " + (error.message || "An error occurred"));
       }
       setSubmitting(false);
     },

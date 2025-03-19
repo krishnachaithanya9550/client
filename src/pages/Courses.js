@@ -13,6 +13,7 @@ const Courses = () => {
   const user = useSelector((state) => state.auth.user);
 
   const [selectedCourse, setSelectedCourse] = useState(null); // For delete confirmation
+  const [showEnrollModal, setShowEnrollModal] = useState(false); // Enroll modal state
 
   useEffect(() => {
     dispatch(fetchCourses());
@@ -20,8 +21,12 @@ const Courses = () => {
   }, [dispatch]);
 
   const handleEnroll = (courseId) => {
-    navigate(`/enroll/${courseId}`);
-    localStorage.setItem("courseId", courseId);
+    if (!user) {
+      setShowEnrollModal(true); // Show modal if user is not logged in
+    } else {
+      navigate(`/enroll/${courseId}`);
+      localStorage.setItem("courseId", courseId);
+    }
   };
 
   const handleAddCourse = () => {
@@ -44,9 +49,9 @@ const Courses = () => {
 
   return (
     <div className="container mt-4">
-      <h2 className="text-center mb-4">Available Courses</h2>
+      <h2>Available Courses</h2>
 
-      {/*  Show "Add Course" button only for Instructor or Admin */}
+      {/* Show "Add Course" button only for Instructor or Admin */}
       {user && (user.role === "instructor" || user.role === "admin") && (
         <button className="btn btn-primary mb-3" onClick={handleAddCourse}>
           Add Course
@@ -69,7 +74,7 @@ const Courses = () => {
                     Enroll
                   </button>
 
-                  {/*  Show Delete Button only for Instructor/Admin */}
+                  {/* Show Delete Button only for Instructor/Admin */}
                   {user && (user.role === "instructor" || user.role === "admin") && (
                     <button
                       className="btn btn-danger btn-sm"
@@ -85,7 +90,7 @@ const Courses = () => {
         ))}
       </div>
 
-      {/*  Bootstrap Delete Confirmation Modal */}
+      {/* Bootstrap Delete Confirmation Modal */}
       {selectedCourse && (
         <div className="modal fade show" style={{ display: "block" }} tabIndex="-1">
           <div className="modal-dialog">
@@ -109,9 +114,43 @@ const Courses = () => {
           </div>
         </div>
       )}
+
+      {/* Modal for Unauthenticated Users Trying to Enroll */}
+      {showEnrollModal && (
+        <div className="modal fade show" style={{ display: "block" }} tabIndex="-1">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title text-danger">Authentication Required</h5>
+                <button type="button" className="btn-close" onClick={() => setShowEnrollModal(false)}></button>
+              </div>
+              <div className="modal-body">
+                <p>Please register or login to enroll in courses.</p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="btn btn-primary"
+                  onClick={() => navigate("/register")}
+                >
+                  Register
+                </button>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => navigate("/login")}
+                >
+                  Login
+                </button>
+                <button type="button" className="btn btn-danger" onClick={() => setShowEnrollModal(false)}>
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
 
 export default Courses;
-

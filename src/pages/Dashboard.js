@@ -17,7 +17,7 @@ const Dashboard = () => {
   // Function to store `courseId` in localStorage and navigate
   const handleViewCourse = (courseId) => {
     if (courseId) {
-      // console.log("Storing courseId:", courseId); // Debugging
+      console.log("Storing courseId:", courseId); // Debugging
       localStorage.setItem("courseId", courseId); // Store courseId
       navigate(`/course/${courseId}`); // Navigate to course details
     } else {

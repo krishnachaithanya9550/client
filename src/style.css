@@ -65,3 +65,24 @@ button:hover {
     font-weight: bold;
     margin-top: 10px;
 }
+
+.profile-container {
+    padding: 30px; /* Padding from all sides */
+  }
+  
+  table {
+    width: 100%; /* Full width */
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 15px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f4f4f4;
+  }
+  

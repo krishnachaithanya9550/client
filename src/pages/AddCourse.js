@@ -1,61 +1,3 @@
-// import React, { useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { addCourse } from "../store/courseSlice";
-// import { useNavigate } from "react-router-dom";
-
-// const AddCourse = () => {
-//   const dispatch = useDispatch();
-//   const navigate = useNavigate();
-//   const user = useSelector((state) => state.auth.user);
-
-//   const [courseData, setCourseData] = useState({
-//     title: "",
-//     description: "",
-//   });
-
-//   // ✅ Redirect if the user is a Student (not allowed to add courses)
-//   if (user.role === "Student") {
-//     navigate("/courses");
-//     return null;
-//   }
-
-//   const handleChange = (e) => {
-//     setCourseData({ ...courseData, [e.target.name]: e.target.value });
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     const newCourse = {
-//       ...courseData,
-//       instructorId: user.id, // ✅ Automatically assign logged-in Instructor ID
-//     };
-//     console.log("instructor id:" , user.id)
-
-//     dispatch(addCourse(newCourse));
-//     navigate("/courses");
-//   };
-
-//   return (
-//     <div>
-//       <h2>Add Course</h2>
-//       <form onSubmit={handleSubmit}>
-//         <div className="mb-3">
-//           <label className="form-label">Title</label>
-//           <input type="text" name="title" className="form-control" onChange={handleChange} required />
-//         </div>
-//         <div className="mb-3">
-//           <label className="form-label">Description</label>
-//           <textarea name="description" className="form-control" onChange={handleChange} required />
-//         </div>
-//         <button type="submit" className="btn btn-success">Add Course</button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default AddCourse;
-
-
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addCourse, deleteCourse } from "../store/courseSlice";
@@ -120,7 +62,7 @@ const AddCourse = () => {
           <label className="form-label">Description</label>
           <textarea name="description" className="form-control" onChange={handleChange} required />
         </div>
-        <button type="submit" className="btn btn-success me-2">Add Course</button>
+        <button type="submit" className="btn btn-primary">Add Course</button>
 
         {/* ✅ Show "Delete" button only for Instructor/Admin */}
         {user && (user.role === "instructor" || user.role === "admin") && (

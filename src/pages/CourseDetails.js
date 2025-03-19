@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const CourseDetails = () => {
   const { courseId } = useParams();
+  const navigate = useNavigate();
   const [course, setCourse] = useState(null);
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [updateLoading, setUpdateLoading] = useState(false);
 
-  // Get token from localStorage
   const token = localStorage.getItem("authtoken");
 
   useEffect(() => {
     const fetchCourseDetails = async () => {
       try {
         const response = await axios.get(`http://localhost:5138/api/Course/${courseId}`, {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         });
         setCourse(response.data);
       } catch (error) {
@@ -29,7 +29,7 @@ const CourseDetails = () => {
     const fetchProgress = async () => {
       try {
         const response = await axios.get(`http://localhost:5138/api/Enrollment/${courseId}/progress`, {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         });
         setProgress(response.data.progress);
       } catch (error) {
@@ -43,20 +43,32 @@ const CourseDetails = () => {
     fetchProgress();
   }, [courseId, token]);
 
-  // Update Progress
   const updateProgress = async () => {
     setUpdateLoading(true);
     try {
       await axios.put(
         `http://localhost:5138/api/Enrollment/${courseId}/progress`,
-        { progress: progress + 10 }, // Increment progress by 10% (Modify as needed)
+        { progress: Math.min(progress + 10, 100) }, // Ensure max is 100%
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setProgress((prev) => Math.min(prev + 10, 100)); // Ensure max progress is 100%
+      setProgress((prev) => Math.min(prev + 10, 100));
     } catch (error) {
       alert("Failed to update progress");
     } finally {
       setUpdateLoading(false);
+    }
+  };
+
+  const startQuiz = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5138/api/Quiz/${courseId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const quizId = response.data.id;
+      localStorage.setItem("quizId", quizId);
+      navigate(`/quiz/${quizId}`);
+    } catch (error) {
+      alert("Quiz not found for this course.");
     }
   };
 
@@ -70,18 +82,20 @@ const CourseDetails = () => {
           <h2 className="card-title">{course?.title}</h2>
           <p className="card-text">{course?.description}</p>
           <p><strong>Instructor:</strong> {course?.instructorUsername}</p>
-          <p><strong>Duration:</strong> {course?.duration} 8 hours</p>
+          <p><strong>Duration:</strong> {course?.duration}8 hours</p>
 
-          {/*  Show Course Progress */}
           <div className="progress mb-3">
             <div className="progress-bar" role="progressbar" style={{ width: `${progress}%` }}>
               {progress}%
             </div>
           </div>
 
-          {/*  Update Progress Button */}
-          <button className="btn btn-primary"  onClick={updateProgress} disabled={updateLoading}>
+          <button className="btn btn-primary me-2" onClick={updateProgress} disabled={updateLoading}>
             {updateLoading ? "Updating..." : "Update Progress"}
+          </button>
+
+          <button className="btn btn-success" onClick={startQuiz} disabled={progress < 100}>
+            Start Quiz
           </button>
         </div>
       </div>
@@ -90,3 +104,4 @@ const CourseDetails = () => {
 };
 
 export default CourseDetails;
+

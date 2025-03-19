@@ -24,7 +24,6 @@ const Login = () => {
       try {
         const result = await dispatch(loginUser(values)).unwrap();
         localStorage.setItem("userEmail", values.email); // Store email in localStorage
-        alert("Login successful!");
         navigate("/dashboard");
       } catch (error) {
         alert("Login failed: " + (error.message || "Invalid credentials"));
