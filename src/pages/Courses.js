@@ -14,6 +14,7 @@ const Courses = () => {
 
   const [selectedCourse, setSelectedCourse] = useState(null); // For delete confirmation
   const [showEnrollModal, setShowEnrollModal] = useState(false); // Enroll modal state
+  const [deleteError, setDeleteError] = useState(null); // Error state for delete
 
   useEffect(() => {
     dispatch(fetchCourses());
@@ -37,9 +38,14 @@ const Courses = () => {
     setSelectedCourse(courseId);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (selectedCourse) {
-      dispatch(deleteCourse(selectedCourse));
+      try {
+        await dispatch(deleteCourse(selectedCourse)).unwrap(); // Ensures promise resolution
+        setDeleteError(null); // Clear any previous error
+      } catch (err) {
+        setDeleteError("This course cannot be deleted because it has active enrollments.");
+      }
       setSelectedCourse(null);
     }
   };
@@ -53,10 +59,13 @@ const Courses = () => {
 
       {/* Show "Add Course" button only for Instructor or Admin */}
       {user && (user.role === "instructor" || user.role === "admin") && (
-        <button className="btn btn-primary mb-3" onClick={handleAddCourse}>
+        <button className="btn btn-primary mb-3" style={{ width: "200px" }} onClick={handleAddCourse}>
           Add Course
         </button>
       )}
+
+      {/* Show delete error message */}
+      {deleteError && <p className="text-danger">{deleteError}</p>}
 
       <div className="row">
         {courses.map((course) => (
@@ -148,7 +157,6 @@ const Courses = () => {
           </div>
         </div>
       )}
-
     </div>
   );
 };

@@ -62,11 +62,11 @@ const AddCourse = () => {
           <label className="form-label">Description</label>
           <textarea name="description" className="form-control" onChange={handleChange} required />
         </div>
-        <button type="submit" className="btn btn-primary">Add Course</button>
+        <button type="submit" className="btn btn-primary" style={{width:"200px"}}>Add Course</button>
 
         {/* ✅ Show "Delete" button only for Instructor/Admin */}
         {user && (user.role === "instructor" || user.role === "admin") && (
-          <button type="button" className="btn btn-danger" onClick={() => handleDeleteClick(courseData.id)}>
+          <button type="button" className="btn btn-danger" style={{width:"200px"}} onClick={() => handleDeleteClick(courseData.id)}>
             Delete Course
           </button>
         )}

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+
 const Home = () => {
   const user = useSelector((state) => state.auth.user);
   const [showModal, setShowModal] = useState(false);
@@ -39,7 +40,10 @@ const Home = () => {
       <div className="row mt-5">
         {/* Browse Courses */}
         <div className="col-md-4">
-          <div className="card shadow p-3">
+          <div className="card shadow p-3"  style={{ transition: "0.3s", cursor: "pointer" }}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          >
             <h3 className="text-primary">📚 Browse Courses</h3>
             <p>Explore a wide range of courses and enhance your skills.</p>
             <Link to="/courses" className="btn btn-outline-primary">
@@ -50,7 +54,10 @@ const Home = () => {
 
         {/* Take Quiz */}
         <div className="col-md-4">
-          <div className="card shadow p-3">
+          <div className="card shadow p-3"  style={{ transition: "0.3s", cursor: "pointer" }}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          >
             <h3 className="text-success">📝 Take Quizzes</h3>
             <p>Test your knowledge with interactive quizzes.</p>
             <button onClick={handleQuizClick} className="btn btn-outline-success">
@@ -61,7 +68,10 @@ const Home = () => {
 
         {/* Enroll in Course */}
         <div className="col-md-4">
-          <div className="card shadow p-3">
+          <div className="card shadow p-3"  style={{ transition: "0.3s", cursor: "pointer" }}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          >
             <h3 className="text-danger">🎓 Enroll in Courses</h3>
             <p>Join a course and start learning today.</p>
             <button onClick={handleEnrollClick} className="btn btn-outline-danger">

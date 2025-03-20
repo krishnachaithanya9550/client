@@ -10,13 +10,19 @@ const QuizPage = () => {
   };
 
   return (
-    <div className="container mt-5 text-center">
-      <h2>Quiz</h2>
-      <p>Get ready for the quiz! Click below to start.</p>
-
-      <button className="btn btn-success" onClick={startQuiz}>
+    <div  >
+      <h2 style={{textAlign:"center"}}>Quiz</h2>
+      <p style={{paddingLeft:"80px"}}>Get ready for the quiz! Click below to start.</p>
+      <h4 style={{textAlign:"left", paddingLeft:"80px"}}>Instructions before starting Quiz</h4>
+      <ul style={{textAlign:"left", paddingLeft:"110px"}}>
+        <li><p>This quiz consists of only MCQ's</p></li>
+        <li><p>View all questions</p></li>
+        <li><p>Read the question completely and answer the questions</p></li>
+      
+      <button className="btn btn-success" style={{width:"200px"}} onClick={startQuiz}>
         Start Quiz
       </button>
+      </ul>
     </div>
   );
 };

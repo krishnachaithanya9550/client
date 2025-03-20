@@ -90,11 +90,11 @@ const CourseDetails = () => {
             </div>
           </div>
 
-          <button className="btn btn-primary me-2" onClick={updateProgress} disabled={updateLoading}>
+          <button className="btn btn-primary me-2" style={{width:"250px"}} onClick={updateProgress} disabled={updateLoading}>
             {updateLoading ? "Updating..." : "Update Progress"}
           </button>
 
-          <button className="btn btn-success" onClick={startQuiz} disabled={progress < 100}>
+          <button className="btn btn-success" style={{width:"250px"}} onClick={startQuiz} disabled={progress < 100}>
             Start Quiz
           </button>
         </div>
